@@ -1,7 +1,12 @@
 import logo from './logo.svg';
 import './App.css';
+import { translate } from '@vitalets/google-translate-api';
+const { text } = await translate('Привет, мир! Как дела?', { to: 'pl' });
 
 function App() {
+  console.log("pikarina")
+
+console.log(text) // => 'Hello World! How are you?'
   return (
     <div className="App">
       <header className="App-header">
