@@ -40,57 +40,54 @@ function App() {
   };
 
   const handleTranslateAll = async () => {
-    const translations = [];
-    for (const row of rows) {
-      // Construct text to translate including only the middle input field
-      const textToTranslate = row.value2.trim();
-      try {
-        const response = await Axios.post(
-          'http://localhost:3030/api/translate', 
-          {
-            text: textToTranslate,
-            to: selectedLanguages.map(lang => {
-              switch (lang) {
-                case 'Catalan':
-                  return 'ca';
-                case 'Czech':
-                  return 'cs';
-                case 'German':
-                  return 'de';
-                case 'Estonian':
-                  return 'et';
-                case 'French':
-                  return 'fr';
-                case 'Hungarian':
-                  return 'hu';
-                case 'Croatian':
-                  return 'hr';
-                case 'Italian':
-                  return 'it';
-                case 'Polish':
-                  return 'pl';
-                case 'Russian':
-                  return 'ru';
-                case 'Slovak':
-                  return 'sk';
-                case 'Swedish':
-                  return 'sv';
-                default:
-                  return '';
-              }
-            }).join(',')
-          }
-        );
-        // Concatenate left input, translated text, and right input
-        const translatedText = `${row.value1.trim()} ${response.data.translatedText} ${row.value3.trim()}`;
-        translations.push(translatedText);
-      } catch (error) {
-        console.error('Error fetching translation:', error);
-      }
+    const texts = rows.map(row => row.value2.trim());
+
+    try {
+      const response = await Axios.post(
+        'http://localhost:3030/api/translate',
+        {
+          texts: texts,
+          to: selectedLanguages.map(lang => {
+            switch (lang) {
+              case 'Catalan':
+                return 'ca';
+              case 'Czech':
+                return 'cs';
+              case 'German':
+                return 'de';
+              case 'Estonian':
+                return 'et';
+              case 'French':
+                return 'fr';
+              case 'Hungarian':
+                return 'hu';
+              case 'Croatian':
+                return 'hr';
+              case 'Italian':
+                return 'it';
+              case 'Polish':
+                return 'pl';
+              case 'Russian':
+                return 'ru';
+              case 'Slovak':
+                return 'sk';
+              case 'Swedish':
+                return 'sv';
+              default:
+                return '';
+            }
+          })
+        }
+      );
+
+      // Handle response
+      console.log(response.data);
+      setTranslatedTexts(response.data);
+    } catch (error) {
+      console.error('Error fetching translation:', error);
     }
-    setTranslatedTexts(translations);
   };
-  
+
 
   const handleLanguageCheckboxChange = (language) => {
     if (selectedLanguages.includes(language)) {
@@ -141,19 +138,26 @@ function App() {
         <button onClick={handleTranslateAll}>Translate All</button>
       </div>
       <div>
-        {translatedTexts.map((text, index) => (
-          <div key={index}>
-            <Editor
-              value={text}
-              highlight={code => highlight(code, languages.markup)}
-              padding={10}
-              style={{
-                fontFamily: '"Fira code", "Fira Mono", monospace',
-                fontSize: 12,
-              }}
-            />
-          </div>
-        ))}
+      {translatedTexts.map((translation, index) => (
+  <div key={index}>
+    <h2>Language: {translation.language}</h2>
+    <Editor
+      value={translation.text.map((text, idx) => (
+        `${rows[idx].value1.trim()} ${text} ${rows[idx].value3.trim()}`
+      )).join('\n')}
+      highlight={code => highlight(code, languages.markup)}
+      padding={10}
+      style={{
+        fontFamily: '"Fira code", "Fira Mono", monospace',
+        fontSize: 12,
+      }}
+    />
+  </div>
+))}
+
+
+
+
       </div>
       <div>
         <h2>Select Languages:</h2>
