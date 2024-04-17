@@ -215,6 +215,8 @@ function App() {
       </AppShell.Main>
       <AppShell.Footer>
       https://dribbble.com/shots/22671301-Translator-App-Light-Dark-Accessibility
+      https://dribbble.com/shots/18189658-Translate-App
+      https://dribbble.com/shots/17464952-Google-Translate-Dark-Mode
       </AppShell.Footer>
     </AppShell>
   );
