@@ -5,8 +5,13 @@ import { highlight, languages } from 'prismjs/components/prism-core';
 import 'prismjs/components/prism-markup';
 import 'prismjs/themes/prism-tomorrow.min.css'; // Example style, you can use another
 import LanguageCheckbox from './LanguageCheckbox';
+import { AppShell, Box, Button, Center, Divider, Flex, Grid, Group, Skeleton, Stack, Text, TextInput, Title } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import BoxBase from './BoxBase';
+import StackBase from './StackBase';
 
 function App() {
+  const [opened, { toggle }] = useDisclosure();
   const [rows, setRows] = useState([{ id: 1, value1: '', value2: '', value3: '', translatedText: '' }]);
   const [translatedTexts, setTranslatedTexts] = useState([]);
   const [selectedLanguages, setSelectedLanguages] = useState([]);
@@ -106,73 +111,112 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <h1>Translated Text:</h1>
-      <div>
-        {rows.map(row => (
-          <div key={row.id}>
-            <input
-              type="text"
-              value={row.value1}
-              onChange={(e) => handleChange(row.id, 'value1', e.target.value)}
-              placeholder="Value 1"
-            />
-            <input
-              type="text"
-              value={row.value2}
-              onChange={(e) => handleChange(row.id, 'value2', e.target.value)}
-              placeholder="Value 2"
-            />
-            <input
-              type="text"
-              value={row.value3}
-              onChange={(e) => handleChange(row.id, 'value3', e.target.value)}
-              placeholder="Value 3"
-            />
-            {rows.length > 1 && (
-              <button onClick={() => handleRemoveRow(row.id)}>Remove</button>
-            )}
-          </div>
-        ))}
-        <button onClick={handleAddRow}>Add Row</button>
-        <button onClick={handleTranslateAll}>Translate All</button>
-      </div>
-      <div>
-      {translatedTexts.map((translation, index) => (
-  <div key={index}>
-    <h2>Language: {translation.language}</h2>
-    <Editor
-      value={translation.text.map((text, idx) => (
-        `${rows[idx].value1.trim()} ${text} ${rows[idx].value3.trim()}`
-      )).join('\n')}
-      highlight={code => highlight(code, languages.markup)}
-      padding={10}
-      style={{
-        fontFamily: '"Fira code", "Fira Mono", monospace',
-        fontSize: 12,
-      }}
-    />
-  </div>
-))}
-
-
-
-
-      </div>
-      <div>
-        <h2>Select Languages:</h2>
-        {['Catalan', 'Czech', 'German', 'Estonian', 'French', 'Hungarian', 'Croatian', 'Italian', 'Polish', 'Russian', 'Slovak', 'Swedish'].map(language => (
-          <LanguageCheckbox
-            key={language}
-            language={language}
-            checked={selectedLanguages.includes(language)}
-            onChange={() => handleLanguageCheckboxChange(language)}
-          />
-        ))}
-        <button onClick={handleCheckAllLanguages}>Check All</button>
-        <button onClick={handleUncheckAllLanguages}>Uncheck All</button>
-      </div>
-    </div>
+    <AppShell
+      header={{ height: 92.48 }}
+      padding="md"
+    >
+      <AppShell.Header>
+        <Title order={1}>
+          QuickTranslate
+        </Title>
+      </AppShell.Header>
+      <AppShell.Main>
+        <Stack
+          align="stretch"
+          justify="center"
+          gap="xl"
+          my="xl"
+        >
+          <StackBase>
+            <Center>
+              <Title order={2}>Language selection</Title>
+            </Center>
+            <Grid grow>
+              {['Catalan', 'Czech', 'German', 'Estonian', 'French', 'Hungarian', 'Croatian', 'Italian', 'Polish', 'Russian', 'Slovak', 'Swedish'].map(language => (
+                <Grid.Col span={2}>
+                  <LanguageCheckbox
+                    key={language}
+                    language={language}
+                    checked={selectedLanguages.includes(language)}
+                    onChange={() => handleLanguageCheckboxChange(language)}
+                  />
+                </Grid.Col>
+              ))}
+            </Grid>
+            <Center>
+              <Group justify="center">
+                <Button onClick={handleCheckAllLanguages}>Check All</Button>
+                <Button onClick={handleUncheckAllLanguages}>Uncheck All</Button>
+              </Group>
+            </Center>
+          </StackBase>
+          <StackBase>
+          <Center>
+              <Title order={2}>String input</Title>
+            </Center>
+            {rows.map(row => (
+              <Grid grow key={row.id}>
+                <Grid.Col span={3}>
+                  <TextInput
+                    value={row.value1}
+                    onChange={(e) => handleChange(row.id, 'value1', e.target.value)}
+                    placeholder="<Untranslated wrapper>"
+                  />
+                </Grid.Col>
+                <Grid.Col span={4}>
+                  <TextInput
+                    value={row.value2}
+                    onChange={(e) => handleChange(row.id, 'value2', e.target.value)}
+                    placeholder="Translated text"
+                  />
+                </Grid.Col>
+                <Grid.Col span={3}>
+                  <TextInput
+                    value={row.value3}
+                    onChange={(e) => handleChange(row.id, 'value3', e.target.value)}
+                    placeholder="</Untranslated wrapper>"
+                  />
+                </Grid.Col>
+                <Grid.Col span={1}>
+                  <Button fullWidth variant="filled" color="red" disabled={rows.length <= 1} onClick={() => handleRemoveRow(row.id)}>Remove</Button>
+                </Grid.Col>
+              </Grid>
+            ))}
+            <Center>
+              <Button onClick={handleAddRow}>Add Row</Button>
+            </Center>
+          </StackBase>
+          <Center>
+            <Button onClick={handleTranslateAll}>Translate!</Button>
+          </Center>
+          <BoxBase>
+            {/* <Skeleton height={120} mt={6} width="100%" radius="xl" /> */}
+            {translatedTexts.map((translation, index) => (
+              <Box my="10">
+                <Text mx="10" size="sm">en - {translation.language}</Text>
+                <Box mx="10" style={{ borderRadius: 10 }} mt={5} mb={10} bg="dark.7" key={index}>
+                  <Editor
+                    value={translation.text.map((text, idx) => (
+                      `${rows[idx].value1.trim()}${text}${rows[idx].value3.trim()}`
+                    )).join('\n')}
+                    highlight={code => highlight(code, languages.markup)}
+                    padding={10}
+                    style={{
+                      fontFamily: '"Fira code", "Fira Mono", monospace',
+                      fontSize: 12,
+                    }}
+                  />
+                </Box>
+                {index !== translatedTexts.length - 1 && <Divider size="xs" color='dark.3' />}
+              </Box>
+            ))}
+          </BoxBase>
+        </Stack>
+      </AppShell.Main>
+      <AppShell.Footer>
+      https://dribbble.com/shots/22671301-Translator-App-Light-Dark-Accessibility
+      </AppShell.Footer>
+    </AppShell>
   );
 }
 

@@ -3,11 +3,29 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import '@mantine/core/styles.css';
+import { TextInput, Container, createTheme, MantineProvider } from '@mantine/core';
+
+const theme = createTheme({
+  components: {
+    TextInput: TextInput.extend({
+      defaultProps: {
+        bg: 'dark.8',
+        variant: 'outline',
+      },
+    }),
+  },
+  primaryColor: 'orange',
+});
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <MantineProvider theme={theme} defaultColorScheme="dark">
+      <Container>
+        <App />
+      </Container>
+    </MantineProvider>
   </React.StrictMode>
 );
 

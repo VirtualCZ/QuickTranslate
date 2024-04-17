@@ -1,4 +1,13 @@
+:root[data-mantine-color-scheme="dark"]{
+  --mantine-color-body: var(--mantine-color-dark-8) !important;
+
+  .mantine-Checkbox-root:not([data-checked="true"]){
+  .mantine-Checkbox-input{
+    background-color: var(--mantine-color-dark-8);
+  }}
+}
 body {
+  
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
