@@ -1,63 +1,56 @@
-const express = require("express")
-const bodyParser = require("body-parser")
-const cors = require("cors")
-const app = express()
+const express = require("express");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const app = express();
 
-app.use(cors())
-app.use(express.json())
-app.use(bodyParser.urlencoded({extended: true}))
+app.use(cors());
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+
+// app.post("/api/translate", async (req, res) => {
+
+//     try {
+//         const { translate } = await import('@william5553/translate-google-api');
+//         const translations = [];
+//         const result = await translate('What time is it?', {
+//             to: 'fr'
+//           });
+//         res.send(translations);
+//         console.log(result);
+//     } catch (error) {
+//         console.error("Translation error:", error);
+//         res.status(500).json({ error: "Translation failed" });
+//     }
+// });
 
 app.post("/api/translate", async (req, res) => {
     const toLanguages = req.body.to;
-    const texts = req.body.texts;
-    console.log("to:" + toLanguages)
-    console.log("texts:" + texts)
-
+    const text = req.body.text;
     try {
         const { translate } = await import('@william5553/translate-google-api');
         const translations = [];
-
-        for (const to of toLanguages) {
+        for (const lang of toLanguages) {
+            // Extract text between <> and </>
+            const regex = /<([^>\s]+)([^>]*)>(.*?)<\/\1>/g;
+            let match;
             const translatedTexts = [];
-            for (const text of texts) {
-                try {
-                    const result = await translate(text, { to: to.trim() });
-                    translatedTexts.push(result.text);
-                } catch (error) {
-                    console.error("Translation error:", error);
-                    translatedTexts.push('Translation failed');
-                }
+            while ((match = regex.exec(text)) !== null) {
+                // Translate the text extracted between <> and </>
+                const translatedText = await translate(match[3], { to: lang });
+                // Reconstruct the translated text with XML tags and attributes
+                const translatedWithTag = `<${match[1]}${match[2]}>${translatedText.text}</${match[1]}>`;
+                translatedTexts.push(translatedWithTag);
+                console.log(translatedText)
             }
-            translations.push({ language: to, text: translatedTexts });
+            translations.push({ language: lang, text: translatedTexts });
         }
-        
         res.send(translations);
         console.log(translations);
     } catch (error) {
         console.error("Translation error:", error);
         res.status(500).json({ error: "Translation failed" });
     }
-
-    // const toLanguages = req.body.to.split(',');
-    // const text = req.body.text;
-
-    // try {
-    //     const { translate } = await import('@william5553/translate-google-api');
-    //     const translations = [];
-
-    //     for (const to of toLanguages) {
-    //         const result = await translate(text, {
-    //             to: to.trim()
-    //         });
-    //         translations.push(result.text);
-    //     }
-        
-    //     res.send({ translatedTexts: translations });
-    //     console.log(translations);
-    // } catch (error) {
-    //     console.error("Translation error:", error);
-    //     res.status(500).json({ error: "Translation failed" });
-    // }
 });
 
 const PORT = process.env.PORT || 3030;
