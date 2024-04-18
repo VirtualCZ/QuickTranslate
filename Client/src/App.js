@@ -127,7 +127,7 @@ function App() {
                 }}
               />
             </Box>
-            <Center
+            <Box
               style={{
                 position: 'absolute',
                 top: '100vh',
@@ -135,52 +135,56 @@ function App() {
                 transform: 'translateY(-100%)',
                 width: '100%'
               }}>
-              <Accordion
-                style={{
-                  left: "0",
-                  width: '90%',
-                  borderRadius: "20px",
-                  overflow: "hidden"
-                }}
-                mb="xl"
-                variant="contained"
-                chevronPosition="left"
-              >
-                <Accordion.Item
-                  style={{
-                    borderRadius: "20px"
-                  }}
-                  value="item">
-                  <AccordionControl>Select languages</AccordionControl>
-                  <Accordion.Panel>
-                    <Stack
-                      align="stretch"
-                      justify="center"
-                      gap="xl"
-                    >
-                      <Grid grow>
-                        {['Catalan', 'Czech', 'German', 'Estonian', 'French', 'Hungarian', 'Croatian', 'Italian', 'Polish', 'Russian', 'Slovak', 'Swedish'].map(language => (
-                          <Grid.Col span={2}>
-                            <LanguageCheckbox
-                              key={language}
-                              language={language}
-                              checked={selectedLanguages.includes(language)}
-                              onChange={() => handleLanguageCheckboxChange(language)}
-                            />
-                          </Grid.Col>
-                        ))}
-                      </Grid>
-                      <Center>
-                        <Group justify="center">
-                          <Button onClick={handleCheckAllLanguages}>Check All</Button>
-                          <Button onClick={handleUncheckAllLanguages}>Uncheck All</Button>
-                        </Group>
-                      </Center>
-                    </Stack>
-                  </Accordion.Panel>
-                </Accordion.Item>
-              </Accordion>
-            </Center>
+              <Container style={{ position: "relative", width: "100%" }} size="xl">
+                <Center>
+                  <Accordion
+                    style={{
+                      left: "0",
+                      width: '100%',
+                      borderRadius: "20px",
+                      overflow: "hidden"
+                    }}
+                    mb="xl"
+                    variant="contained"
+                    chevronPosition="left"
+                  >
+                    <Accordion.Item
+                      style={{
+                        borderRadius: "20px"
+                      }}
+                      value="item">
+                      <AccordionControl>Select languages</AccordionControl>
+                      <Accordion.Panel>
+                        <Stack
+                          align="stretch"
+                          justify="center"
+                          gap="xl"
+                        >
+                          <Grid grow>
+                            {['Catalan', 'Czech', 'German', 'Estonian', 'French', 'Hungarian', 'Croatian', 'Italian', 'Polish', 'Russian', 'Slovak', 'Swedish'].map(language => (
+                              <Grid.Col span={2}>
+                                <LanguageCheckbox
+                                  key={language}
+                                  language={language}
+                                  checked={selectedLanguages.includes(language)}
+                                  onChange={() => handleLanguageCheckboxChange(language)}
+                                />
+                              </Grid.Col>
+                            ))}
+                          </Grid>
+                          <Center>
+                            <Group justify="center">
+                              <Button onClick={handleCheckAllLanguages}>Check All</Button>
+                              <Button onClick={handleUncheckAllLanguages}>Uncheck All</Button>
+                            </Group>
+                          </Center>
+                        </Stack>
+                      </Accordion.Panel>
+                    </Accordion.Item>
+                  </Accordion>
+                </Center>
+              </Container>
+            </Box>
           </AppShell.Section>
           <Stack
             align="stretch"
