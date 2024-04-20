@@ -8,6 +8,8 @@ import LanguageCheckbox from './Elements/LanguageCheckbox';
 import { Accordion, AppShell, Box, Button, Center, Container, Grid, Group, ScrollArea, Stack, Title, AccordionControlProps, Divider, Image, Skeleton } from '@mantine/core';
 import StackBase from './Elements/StackBase';
 import BoxBase from './Elements/BoxBase';
+import ThemeButton from './Elements/ThemeButton';
+import Header from './PageParts/Header';
 
 function App() {
   const [inputSection, switchSection] = useState(true);
@@ -230,6 +232,7 @@ function App() {
                             <Button onClick={handleUncheckAllLanguages}>Uncheck All</Button>
                           </Group>
                         </Center>
+                        <ThemeButton />
                       </Stack>
                     </Accordion.Panel>
                   </Accordion.Item>
