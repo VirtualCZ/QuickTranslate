@@ -4,10 +4,10 @@ import Editor from 'react-simple-code-editor';
 import { highlight, languages } from 'prismjs/components/prism-core';
 import 'prismjs/components/prism-markup';
 import 'prismjs/themes/prism-tomorrow.min.css'; // Example style, you can use another
-import LanguageCheckbox from './LanguageCheckbox';
-import { Accordion, AppShell, Box, Button, Center, Container, Grid, Group, ScrollArea, Stack, Title, AccordionControlProps, Divider } from '@mantine/core';
-import StackBase from './StackBase';
-import BoxBase from './BoxBase';
+import LanguageCheckbox from './Elements/LanguageCheckbox';
+import { Accordion, AppShell, Box, Button, Center, Container, Grid, Group, ScrollArea, Stack, Title, AccordionControlProps, Divider, Image, Skeleton } from '@mantine/core';
+import StackBase from './Elements/StackBase';
+import BoxBase from './Elements/BoxBase';
 
 function App() {
   const [inputSection, switchSection] = useState(true);
@@ -16,6 +16,7 @@ function App() {
   const [selectedLanguages, setSelectedLanguages] = useState([]);
 
   const handleTranslate = async () => {
+    setTranslatedTexts([])
     switchSection(!inputSection)
     try {
       const response = await Axios.post(
@@ -95,38 +96,59 @@ function App() {
   }
 
   return (
-    <>
-      <AppShell
-        header={{ height: 50 }}
-        padding="md"
+    <AppShell
+      header={{ height: 60 }}
+    // padding="md"
+    >
+      <AppShell.Header
+        withBorder={false}
       >
-        <AppShell.Header>
-          <Title order={1}>
-            QuickTranslate
-          </Title>
-        </AppShell.Header>
-        <AppShell.Main
-          style={{
-            minHeight: "100vh",
-            maxHeight: "100vh",
-            height: "100vh",
-            overflow: "hidden"
-          }}
-        >
-          <Box 
+        <Container
+          h="100%"
+          size="xl">
+          <Center
+            pt="md"
+            pb="md"
+            h="100%"
+            inline
+            style={{
+              paddingInlineStart: "calc(var(--app-shell-navbar-offset, 0rem) + var(--app-shell-padding))",
+              paddingInlineEnd: "calc(var(--app-shell-aside-offset, 0rem) + var(--app-shell-padding))"
+            }}
+          >
+            <Image
+              style={{
+                flex: "unset"
+              }}
+              h="100%"
+              src="/logo-no-background.svg"
+              alt="QuickTranslate logo"
+              className='logo'
+            />
+          </Center>
+        </Container>
+      </AppShell.Header>
+      <AppShell.Main
+        style={{
+          minHeight: "100vh",
+          maxHeight: "100vh",
+          height: "100vh",
+          overflow: "hidden",
+        }}
+      >
+        <Box
           style={{
             position: "relative",
             height: "100%",
             width: "100%",
-            overflow: "hidden",
           }}
-          >
+        >
           <Box
             style={{
               height: "100%",
               width: "100%",
               position: "absolute",
-              transition: "top 0.7s ease", // Define transition for the top property
+              transition: "top 0.7s ease-in-out", // Define transition for the top property
               top: inputSection ? "0%" : "-100%",
             }}
           >
@@ -139,7 +161,7 @@ function App() {
             >
               <Box
                 style={{
-                  height: "calc(100% - 115px)",
+                  height: "calc(100% - 83px)",
                   overflow: "scroll",
                   border: "1px solid var(--mantine-color-dark-4)",
                   borderRadius: "20px"
@@ -174,7 +196,7 @@ function App() {
                     borderRadius: "20px",
                     overflow: "hidden"
                   }}
-                  mb="xl"
+                  mb="md"
                   variant="contained"
                   chevronPosition="left"
                 >
@@ -192,7 +214,7 @@ function App() {
                       >
                         <Grid grow>
                           {['Catalan', 'Czech', 'German', 'Estonian', 'French', 'Hungarian', 'Croatian', 'Italian', 'Polish', 'Russian', 'Slovak', 'Swedish'].map(language => (
-                            <Grid.Col span={2}>
+                            <Grid.Col span={{ base: 6, sm: 4, md: 3, lg: 2 }}>
                               <LanguageCheckbox
                                 key={language}
                                 language={language}
@@ -228,7 +250,7 @@ function App() {
                 align="stretch"
                 justify="center"
                 gap="xl"
-                my="xl"
+                my="md"
               >
                 <Button
                   onClick={(e) => switchSection(!inputSection)}
@@ -239,36 +261,42 @@ function App() {
                   Back
                 </Button>
                 <BoxBase>
-                  {translatedTexts.map((translation, index) => (
-                    <Box my="10">
-                      <Box key={index}>
-                        <Title order={2}>{translation.language}</Title>
+                  {translatedTexts[0] == undefined ? selectedLanguages.map((lang, index) => (
+                    <Box my="10" key={index}>
+                      <Title order={2}>{lang}</Title>
+                      <Skeleton height={8} radius="xl" />
+                      <Skeleton height={8} mt={6} radius="xl" />
+                      <Skeleton height={8} mt={6} width="70%" radius="xl" />
+                      {index !== translatedTexts.length - 1 && <Divider size="xs" color='dark.3' />}
+                    </Box>
+                  ))
+                    :
+                    translatedTexts.map((translation, index) => (
+                      <Box key={index} m="md">
+                        <Title mb="xs" order={2}>{translation.language}</Title>
                         <Editor
                           value={translation.text.join('\n')}
                           highlight={code => highlight(code, languages.markup)}
-                          padding={10}
                           style={{
                             fontFamily: '"Fira code", "Fira Mono", monospace',
                             fontSize: 12,
                           }}
                         />
+                        {index !== translatedTexts.length - 1 && <Divider mt="md" size="xs" color='dark.3' />}
                       </Box>
-                      {index !== translatedTexts.length - 1 && <Divider size="xs" color='dark.3' />}
-                    </Box>
-                  ))}
+                    ))}
                 </BoxBase>
               </Stack>
             </AppShell.Section>
-            </Box>
           </Box>
-        </AppShell.Main>
-        {/* <AppShell.Footer>
+        </Box>
+      </AppShell.Main>
+      {/* <AppShell.Footer>
       https://dribbble.com/shots/22671301-Translator-App-Light-Dark-Accessibility
       https://dribbble.com/shots/18189658-Translate-App
       https://dribbble.com/shots/17464952-Google-Translate-Dark-Mode
       </AppShell.Footer> */}
-      </AppShell>
-    </>
+    </AppShell>
 
   );
 }

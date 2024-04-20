@@ -8,12 +8,12 @@ import { TextInput, Container, createTheme, MantineProvider } from '@mantine/cor
 
 const theme = createTheme({
   components: {
-    TextInput: TextInput.extend({
-      defaultProps: {
-        bg: 'dark.8',
-        variant: 'outline',
-      },
-    }),
+    // TextInput: TextInput.extend({
+    //   defaultProps: {
+    //     bg: 'dark.8',
+    //     variant: 'outline',
+    //   },
+    // }),
   },
   primaryColor: 'orange',
 });
@@ -21,7 +21,7 @@ const theme = createTheme({
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <MantineProvider theme={theme} defaultColorScheme="dark">
+    <MantineProvider theme={theme} defaultColorScheme="auto">
       <Container size="xl">
         <App />
         </Container>
