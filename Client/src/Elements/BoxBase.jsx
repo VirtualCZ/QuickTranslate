@@ -4,10 +4,9 @@ import React from 'react';
 function BoxBase({ children }) {
     return (
         <Box
-            bg="dark.5"
             style={{ 
+                borderRadius: "20px",
                 border: "1px solid var(--mantine-color-dark-4)",
-                borderRadius: "20px"
             }}
         >
             {children}

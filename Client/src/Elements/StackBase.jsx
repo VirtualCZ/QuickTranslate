@@ -7,8 +7,11 @@ function StackBase({ children }) {
             align="stretch"
             justify="center"
             gap="md"
-            bg="dark.5"
-            style={{ borderRadius: 15 }}
+            // bg="dark.5"
+            style={{ 
+                borderRadius: "20px",
+                border: "1px solid var(--mantine-color-dark-4)",
+            }}
             p={10}
         >
             {children}
