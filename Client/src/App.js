@@ -102,34 +102,7 @@ function App() {
       header={{ height: 60 }}
     // padding="md"
     >
-      <AppShell.Header
-        withBorder={false}
-      >
-        <Container
-          h="100%"
-          size="xl">
-          <Center
-            pt="md"
-            pb="md"
-            h="100%"
-            inline
-            style={{
-              paddingInlineStart: "calc(var(--app-shell-navbar-offset, 0rem) + var(--app-shell-padding))",
-              paddingInlineEnd: "calc(var(--app-shell-aside-offset, 0rem) + var(--app-shell-padding))"
-            }}
-          >
-            <Image
-              style={{
-                flex: "unset"
-              }}
-              h="100%"
-              src="/logo-no-background.svg"
-              alt="QuickTranslate logo"
-              className='logo'
-            />
-          </Center>
-        </Container>
-      </AppShell.Header>
+      <Header />
       <AppShell.Main
         style={{
           minHeight: "100vh",
@@ -268,27 +241,27 @@ function App() {
                     <>
                       <Box key={index} m="md">
                         <Title mb="xs" order={2}>{lang}</Title>
-                      <Skeleton height={8} radius="xl" />
-                      <Skeleton height={8} mt={6} radius="xl" />
-                      <Skeleton height={8} mt={6} width="70%" radius="xl" />
-                    </Box>
+                        <Skeleton height={8} radius="xl" />
+                        <Skeleton height={8} mt={6} radius="xl" />
+                        <Skeleton height={8} mt={6} width="70%" radius="xl" />
+                      </Box>
                       {index !== selectedLanguages.length - 1 && <Divider size="xs" color='dark.4' />}
                     </>
                   ))
                     :
                     translatedTexts.map((translation, index) => (
                       <>
-                      <Box key={index} m="md">
-                        <Title mb="xs" order={2}>{translation.language}</Title>
-                        <Editor
-                          value={translation.text.join('\n')}
-                          highlight={code => highlight(code, languages.markup)}
-                          style={{
-                            fontFamily: '"Fira code", "Fira Mono", monospace',
-                            fontSize: 12,
-                          }}
-                        />
-                      </Box>
+                        <Box key={index} m="md">
+                          <Title mb="xs" order={2}>{translation.language}</Title>
+                          <Editor
+                            value={translation.text.join('\n')}
+                            highlight={code => highlight(code, languages.markup)}
+                            style={{
+                              fontFamily: '"Fira code", "Fira Mono", monospace',
+                              fontSize: 12,
+                            }}
+                          />
+                        </Box>
                         {index !== translatedTexts.length - 1 && <Divider mt="md" size="xs" color='dark.4' />}
                       </>
                     ))}
