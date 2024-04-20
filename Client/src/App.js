@@ -5,7 +5,7 @@ import { highlight, languages } from 'prismjs/components/prism-core';
 import 'prismjs/components/prism-markup';
 import 'prismjs/themes/prism-tomorrow.min.css'; // Example style, you can use another
 import LanguageCheckbox from './Elements/LanguageCheckbox';
-import { Accordion, AppShell, Box, Button, Center, Container, Grid, Group, ScrollArea, Stack, Title, AccordionControlProps, Divider, Image, Skeleton } from '@mantine/core';
+import { Accordion, AppShell, Box, Button, Center, Container, Grid, Group, Stack, Title, AccordionControlProps, Divider, Image, Skeleton } from '@mantine/core';
 import StackBase from './Elements/StackBase';
 import BoxBase from './Elements/BoxBase';
 import ThemeButton from './Elements/ThemeButton';
@@ -265,16 +265,19 @@ function App() {
                 </Button>
                 <BoxBase>
                   {translatedTexts[0] == undefined ? selectedLanguages.map((lang, index) => (
-                    <Box my="10" key={index}>
-                      <Title order={2}>{lang}</Title>
+                    <>
+                      <Box key={index} m="md">
+                        <Title mb="xs" order={2}>{lang}</Title>
                       <Skeleton height={8} radius="xl" />
                       <Skeleton height={8} mt={6} radius="xl" />
                       <Skeleton height={8} mt={6} width="70%" radius="xl" />
-                      {index !== translatedTexts.length - 1 && <Divider size="xs" color='dark.3' />}
                     </Box>
+                      {index !== selectedLanguages.length - 1 && <Divider size="xs" color='dark.4' />}
+                    </>
                   ))
                     :
                     translatedTexts.map((translation, index) => (
+                      <>
                       <Box key={index} m="md">
                         <Title mb="xs" order={2}>{translation.language}</Title>
                         <Editor
@@ -285,8 +288,9 @@ function App() {
                             fontSize: 12,
                           }}
                         />
-                        {index !== translatedTexts.length - 1 && <Divider mt="md" size="xs" color='dark.3' />}
                       </Box>
+                        {index !== translatedTexts.length - 1 && <Divider mt="md" size="xs" color='dark.4' />}
+                      </>
                     ))}
                 </BoxBase>
               </Stack>
