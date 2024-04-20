@@ -10,12 +10,13 @@ import StackBase from './StackBase';
 import BoxBase from './BoxBase';
 
 function App() {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [inputSection, switchSection] = useState(true);
   const [inputXml, setInputXml] = useState('');
   const [translatedTexts, setTranslatedTexts] = useState([]);
   const [selectedLanguages, setSelectedLanguages] = useState([]);
 
   const handleTranslate = async () => {
+    switchSection(!inputSection)
     try {
       const response = await Axios.post(
         'http://localhost:3030/api/translate',
@@ -85,9 +86,8 @@ function App() {
         <Button
           style={{
             minWidth: "fit-content",
-            // marginInlineEnd: "var(--mantine-spacing-md)",
-            borderRadius: "0 20px 0 0",
-            height: "46px",
+            borderRadius: "0 19px 0 0",
+            height: "49px",
           }}
           onClick={handleTranslate}>Translate</Button>
       </Center>
@@ -105,113 +105,162 @@ function App() {
             QuickTranslate
           </Title>
         </AppShell.Header>
-        <AppShell.Main>
-          {/* <AppShell.Section grow component={ScrollArea}> */}
-          <AppShell.Section>
-            <Box
+        <AppShell.Main
+          style={{
+            minHeight: "100vh",
+            maxHeight: "100vh",
+            height: "100vh",
+            overflow: "hidden"
+          }}
+        >
+          <Box 
+          style={{
+            position: "relative",
+            height: "100%",
+            width: "100%",
+            overflow: "hidden",
+          }}
+          >
+          <Box
+            style={{
+              height: "100%",
+              width: "100%",
+              position: "absolute",
+              transition: "top 0.7s ease", // Define transition for the top property
+              top: inputSection ? "0%" : "-100%",
+            }}
+          >
+            <AppShell.Section
               style={{
-                minHeight: "calc(100vh - 93px - var(--app-shell-header-offset, 0rem) - var(--app-shell-padding) - var(--app-shell-footer-offset, 0rem) - var(--app-shell-padding)",
-                maxHeight: "calc(100vh - 93px - var(--app-shell-header-offset, 0rem) - var(--app-shell-padding) - var(--app-shell-footer-offset, 0rem) - var(--app-shell-padding)",
-                overflow: "scroll",
+                width: "100%",
+                height: "100%",
+                overflow: "hidden",
               }}
             >
-              <Editor
-                value={inputXml}
-                placeholder="Enter XML code..."
-                onValueChange={e => setInputXml(e)}
-                highlight={code => highlight(code, languages.markup)}
+              <Box
                 style={{
-                  fontFamily: '"Fira code", "Fira Mono", monospace',
-                  fontSize: 12,
-                  width: "100%",
+                  height: "calc(100% - 115px)",
+                  overflow: "scroll",
+                  border: "1px solid var(--mantine-color-dark-4)",
+                  borderRadius: "20px"
                 }}
-              />
-            </Box>
-            <Box
-              style={{
-                position: 'absolute',
-                top: '100vh',
-                left: "0",
-                transform: 'translateY(-100%)',
-                width: '100%'
-              }}>
-              <Container style={{ position: "relative", width: "100%" }} size="xl">
-                <Center>
-                  <Accordion
+              >
+                <Editor
+                  value={inputXml}
+                  placeholder="Enter XML code..."
+                  padding={20}
+                  onValueChange={e => setInputXml(e)}
+                  highlight={code => highlight(code, languages.markup)}
+                  style={{
+                    fontFamily: '"Fira code", "Fira Mono", monospace',
+                    fontSize: 12,
+                    width: "100%",
+                    minHeight: "100%"
+                  }}
+                />
+              </Box>
+              <Box
+                style={{
+                  position: 'absolute',
+                  top: '100%',
+                  left: "0",
+                  transform: 'translateY(-100%)',
+                  width: '100%'
+                }}>
+                <Accordion
+                  style={{
+                    left: "0",
+                    width: '100%',
+                    borderRadius: "20px",
+                    overflow: "hidden"
+                  }}
+                  mb="xl"
+                  variant="contained"
+                  chevronPosition="left"
+                >
+                  <Accordion.Item
                     style={{
-                      left: "0",
-                      width: '100%',
-                      borderRadius: "20px",
-                      overflow: "hidden"
+                      borderRadius: "20px"
                     }}
-                    mb="xl"
-                    variant="contained"
-                    chevronPosition="left"
-                  >
-                    <Accordion.Item
-                      style={{
-                        borderRadius: "20px"
-                      }}
-                      value="item">
-                      <AccordionControl>Select languages</AccordionControl>
-                      <Accordion.Panel>
-                        <Stack
-                          align="stretch"
-                          justify="center"
-                          gap="xl"
-                        >
-                          <Grid grow>
-                            {['Catalan', 'Czech', 'German', 'Estonian', 'French', 'Hungarian', 'Croatian', 'Italian', 'Polish', 'Russian', 'Slovak', 'Swedish'].map(language => (
-                              <Grid.Col span={2}>
-                                <LanguageCheckbox
-                                  key={language}
-                                  language={language}
-                                  checked={selectedLanguages.includes(language)}
-                                  onChange={() => handleLanguageCheckboxChange(language)}
-                                />
-                              </Grid.Col>
-                            ))}
-                          </Grid>
-                          <Center>
-                            <Group justify="center">
-                              <Button onClick={handleCheckAllLanguages}>Check All</Button>
-                              <Button onClick={handleUncheckAllLanguages}>Uncheck All</Button>
-                            </Group>
-                          </Center>
-                        </Stack>
-                      </Accordion.Panel>
-                    </Accordion.Item>
-                  </Accordion>
-                </Center>
-              </Container>
+                    value="item">
+                    <AccordionControl>Select languages</AccordionControl>
+                    <Accordion.Panel>
+                      <Stack
+                        align="stretch"
+                        justify="center"
+                        gap="xl"
+                      >
+                        <Grid grow>
+                          {['Catalan', 'Czech', 'German', 'Estonian', 'French', 'Hungarian', 'Croatian', 'Italian', 'Polish', 'Russian', 'Slovak', 'Swedish'].map(language => (
+                            <Grid.Col span={2}>
+                              <LanguageCheckbox
+                                key={language}
+                                language={language}
+                                checked={selectedLanguages.includes(language)}
+                                onChange={() => handleLanguageCheckboxChange(language)}
+                              />
+                            </Grid.Col>
+                          ))}
+                        </Grid>
+                        <Center>
+                          <Group justify="center">
+                            <Button onClick={handleCheckAllLanguages}>Check All</Button>
+                            <Button onClick={handleUncheckAllLanguages}>Uncheck All</Button>
+                          </Group>
+                        </Center>
+                      </Stack>
+                    </Accordion.Panel>
+                  </Accordion.Item>
+                </Accordion>
+              </Box>
+            </AppShell.Section>
+            <AppShell.Section
+              style={{
+                transition: "top 0.7s ease", // Define transition for the top property
+                top: inputSection ? "100%" : "0%",
+                width: "100%",
+                height: "100%",
+                overflow: "hidden",
+                // position: "absolute"
+              }}
+            >
+              <Stack
+                align="stretch"
+                justify="center"
+                gap="xl"
+                my="xl"
+              >
+                <Button
+                  onClick={(e) => switchSection(!inputSection)}
+                  style={{
+                    borderRadius: "20px"
+                  }}
+                >
+                  Back
+                </Button>
+                <BoxBase>
+                  {translatedTexts.map((translation, index) => (
+                    <Box my="10">
+                      <Box key={index}>
+                        <Title order={2}>{translation.language}</Title>
+                        <Editor
+                          value={translation.text.join('\n')}
+                          highlight={code => highlight(code, languages.markup)}
+                          padding={10}
+                          style={{
+                            fontFamily: '"Fira code", "Fira Mono", monospace',
+                            fontSize: 12,
+                          }}
+                        />
+                      </Box>
+                      {index !== translatedTexts.length - 1 && <Divider size="xs" color='dark.3' />}
+                    </Box>
+                  ))}
+                </BoxBase>
+              </Stack>
+            </AppShell.Section>
             </Box>
-          </AppShell.Section>
-          <Stack
-            align="stretch"
-            justify="center"
-            gap="xl"
-            my="xl"
-          >
-            <BoxBase>
-              {translatedTexts.map((translation, index) => (
-                <Box my="10">
-                  <Box key={index}>
-                    <Title order={2}>{translation.language}</Title>
-                    <Editor
-                      value={translation.text.join('\n')}
-                      highlight={code => highlight(code, languages.markup)}
-                      padding={10}
-                      style={{
-                        fontFamily: '"Fira code", "Fira Mono", monospace',
-                        fontSize: 12,
-                      }}
-                    />
-                  </Box>
-                  {index !== translatedTexts.length - 1 && <Divider size="xs" color='dark.3' />}
-                </Box>
-              ))}
-            </BoxBase>
-          </Stack>
+          </Box>
         </AppShell.Main>
         {/* <AppShell.Footer>
       https://dribbble.com/shots/22671301-Translator-App-Light-Dark-Accessibility
