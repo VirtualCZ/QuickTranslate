@@ -26,10 +26,10 @@ app.use(function(req, res, next) {
 });
 
 app.post('/translate', function(req, res) {
-  const toLanguages = req.body.to;
-  const text = req.body.text;
+  // const toLanguages = req.body.to;
+  // const text = req.body.text;
   // Add your code here
-  res.json({toLanguages: toLanguages, text: text,success: 'post call succeed!', url: req.url, body: req.body})
+  res.json({ success: 'post call succeed!', url: req.url, body: req.body})
 });
 
 app.listen(3000, function() {

@@ -46,13 +46,13 @@ function LanguageAccordion({ handleTranslate, setSelectedLanguages, selectedLang
           const restOperation = post({
             apiName: 'QuickTranslateAPI',
             path: '/translate',   
-            options: {
-                body: {
-                  message: 'Mow the lawn',
-                  toLanguages: "OwO",
-                  text: "UwU",
-                }
-              }
+            // options: {
+            //     body: {
+            //       message: 'Mow the lawn',
+            //       toLanguages: "OwO",
+            //       text: "UwU",
+            //     }
+            //   }
           });
          
           const { body } = await restOperation.response;
