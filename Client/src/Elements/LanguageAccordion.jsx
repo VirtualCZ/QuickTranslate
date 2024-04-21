@@ -10,9 +10,9 @@ function LanguageAccordion({ handleTranslate, setSelectedLanguages, selectedLang
             <Center>
                 <Accordion.Control {...props} />
                 <Button
+                    radius="0 19px 0 0"
                     style={{
                         minWidth: "fit-content",
-                        borderRadius: "0 19px 0 0",
                         height: "49px",
                     }}
                     disabled={selectedLanguages == false ? true : false}
@@ -38,13 +38,9 @@ function LanguageAccordion({ handleTranslate, setSelectedLanguages, selectedLang
     };
     return (
         <Box
-            style={{
-                position: 'absolute',
-                top: '100%',
-                left: "0",
-                transform: 'translateY(-100%)',
-                width: '100%'
-            }}>
+            pos="relative"
+            w="100%"
+        >
             <Accordion
                 style={{
                     left: "0",
@@ -84,8 +80,16 @@ function LanguageAccordion({ handleTranslate, setSelectedLanguages, selectedLang
                             </Grid>
                             <Center>
                                 <Group justify="center">
-                                    <Button onClick={handleCheckAllLanguages}>Check All</Button>
-                                    <Button onClick={handleUncheckAllLanguages}>Uncheck All</Button>
+                                    <Button
+                                        onClick={handleCheckAllLanguages}
+                                    >
+                                        Check All
+                                    </Button>
+                                    <Button
+                                        onClick={handleUncheckAllLanguages}
+                                    >
+                                        Uncheck All
+                                    </Button>
                                 </Group>
                             </Center>
                             <ThemeButton />

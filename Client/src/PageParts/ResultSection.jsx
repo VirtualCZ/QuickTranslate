@@ -25,9 +25,6 @@ function ResultSection({translatedTexts, switchSection, inputSection, selectedLa
             >
                 <Button
                     onClick={(e) => switchSection(!inputSection)}
-                    style={{
-                        borderRadius: "20px"
-                    }}
                 >
                     Back
                 </Button>
