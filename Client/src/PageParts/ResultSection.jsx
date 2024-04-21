@@ -1,10 +1,11 @@
 import { AppShell, Box, Button, Divider, Skeleton, Stack, Title } from '@mantine/core';
-import { highlight, languages } from 'prismjs/components/prism-core';
+import Prism from "prismjs";
+import 'prismjs/components/prism-markup';
 import React from 'react';
 import BoxBase from '../Elements/BoxBase';
 import Editor from 'react-simple-code-editor';
 
-function Results({translatedTexts, switchSection, inputSection, selectedLanguages}) {
+function ResultSection({translatedTexts, switchSection, inputSection, selectedLanguages}) {
     return (
         <AppShell.Section
             style={{
@@ -31,7 +32,7 @@ function Results({translatedTexts, switchSection, inputSection, selectedLanguage
                     Back
                 </Button>
                 <BoxBase>
-                    {translatedTexts[0] == undefined ? selectedLanguages.map((lang, index) => (
+                    {translatedTexts[0] === undefined ? selectedLanguages.map((lang, index) => (
                         <>
                             <Box key={index} m="md">
                                 <Title mb="xs" order={2}>{lang}</Title>
@@ -49,7 +50,7 @@ function Results({translatedTexts, switchSection, inputSection, selectedLanguage
                                     <Title mb="xs" order={2}>{translation.language}</Title>
                                     <Editor
                                         value={translation.text.join('\n')}
-                                        highlight={code => highlight(code, languages.markup)}
+                                        highlight={code => Prism.highlight(code, Prism.languages.markup)}
                                         style={{
                                             fontFamily: '"Fira code", "Fira Mono", monospace',
                                             fontSize: 12,
@@ -65,4 +66,4 @@ function Results({translatedTexts, switchSection, inputSection, selectedLanguage
     );
 }
 
-export default Results;
+export default ResultSection;

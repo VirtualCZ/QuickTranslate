@@ -1,11 +1,11 @@
-import { Accordion, AppShell, Box, Button, Center, Grid, Group, Stack } from '@mantine/core';
+import { AppShell, Box } from '@mantine/core';
 import React from 'react';
 import Editor from 'react-simple-code-editor';
-import { highlight, languages } from 'prismjs/components/prism-core';
+import Prism from "prismjs";
+import 'prismjs/components/prism-markup';
 import LanguageAccordion from '../Elements/LanguageAccordion';
 
 function InputSection({setSelectedLanguages, handleTranslate, selectedLanguages, inputXml, setInputXml}) {
-
     return (
         <AppShell.Section
         style={{
@@ -27,7 +27,7 @@ function InputSection({setSelectedLanguages, handleTranslate, selectedLanguages,
             placeholder="Enter XML code..."
             padding={20}
             onValueChange={e => setInputXml(e)}
-            highlight={code => highlight(code, languages.markup)}
+            highlight={code => Prism.highlight(code, Prism.languages.markup)}
             style={{
               fontFamily: '"Fira code", "Fira Mono", monospace',
               fontSize: 12,

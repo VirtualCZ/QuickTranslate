@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import Axios from "axios";
-import 'prismjs/components/prism-markup';
-import 'prismjs/themes/prism-tomorrow.min.css'; // Example style, you can use another
 import { AppShell, Box} from '@mantine/core';
 import Header from './PageParts/Header';
-import Results from './PageParts/ResultSection';
+import ResultSection from './PageParts/ResultSection';
 import InputSection from './PageParts/InputSection';
+import 'prismjs/themes/prism-tomorrow.min.css'; // Example style, you can use another
 
 function App() {
   const [inputSection, switchSection] = useState(true);
@@ -99,7 +98,7 @@ function App() {
               inputXml={inputXml}
               setInputXml={setInputXml}
             />
-            <Results
+            <ResultSection
               translatedTexts={translatedTexts}
               switchSection={switchSection}
               inputSection={inputSection}
