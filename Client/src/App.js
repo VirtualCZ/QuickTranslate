@@ -1,15 +1,11 @@
 import React, { useState } from 'react';
 import Axios from "axios";
-import Editor from 'react-simple-code-editor';
-import { highlight, languages } from 'prismjs/components/prism-core';
 import 'prismjs/components/prism-markup';
 import 'prismjs/themes/prism-tomorrow.min.css'; // Example style, you can use another
-import LanguageCheckbox from './Elements/LanguageCheckbox';
-import { Accordion, AppShell, Box, Button, Center, Container, Grid, Group, Stack, Title, AccordionControlProps, Divider, Image, Skeleton } from '@mantine/core';
-import StackBase from './Elements/StackBase';
-import BoxBase from './Elements/BoxBase';
-import ThemeButton from './Elements/ThemeButton';
+import { AppShell, Box} from '@mantine/core';
 import Header from './PageParts/Header';
+import Results from './PageParts/ResultSection';
+import InputSection from './PageParts/InputSection';
 
 function App() {
   const [inputSection, switchSection] = useState(true);
@@ -66,37 +62,6 @@ function App() {
     }
   };
 
-  const handleLanguageCheckboxChange = (language) => {
-    if (selectedLanguages.includes(language)) {
-      setSelectedLanguages(selectedLanguages.filter(item => item !== language));
-    } else {
-      setSelectedLanguages([...selectedLanguages, language]);
-    }
-  };
-
-  const handleCheckAllLanguages = () => {
-    setSelectedLanguages(['Catalan', 'Czech', 'German', 'Estonian', 'French', 'Hungarian', 'Croatian', 'Italian', 'Polish', 'Russian', 'Slovak', 'Swedish']);
-  };
-
-  const handleUncheckAllLanguages = () => {
-    setSelectedLanguages([]);
-  };
-
-  function AccordionControl(props: AccordionControlProps) {
-    return (
-      <Center>
-        <Accordion.Control {...props} />
-        <Button
-          style={{
-            minWidth: "fit-content",
-            borderRadius: "0 19px 0 0",
-            height: "49px",
-          }}
-          onClick={handleTranslate}>Translate</Button>
-      </Center>
-    );
-  }
-
   return (
     <AppShell
       header={{ height: 60 }}
@@ -127,147 +92,19 @@ function App() {
               top: inputSection ? "0%" : "-100%",
             }}
           >
-            <AppShell.Section
-              style={{
-                width: "100%",
-                height: "100%",
-                overflow: "hidden",
-              }}
-            >
-              <Box
-                style={{
-                  height: "calc(100% - 83px)",
-                  overflow: "scroll",
-                  border: "1px solid var(--mantine-color-dark-4)",
-                  borderRadius: "20px"
-                }}
-              >
-                <Editor
-                  value={inputXml}
-                  placeholder="Enter XML code..."
-                  padding={20}
-                  onValueChange={e => setInputXml(e)}
-                  highlight={code => highlight(code, languages.markup)}
-                  style={{
-                    fontFamily: '"Fira code", "Fira Mono", monospace',
-                    fontSize: 12,
-                    width: "100%",
-                    minHeight: "100%"
-                  }}
-                />
-              </Box>
-              <Box
-                style={{
-                  position: 'absolute',
-                  top: '100%',
-                  left: "0",
-                  transform: 'translateY(-100%)',
-                  width: '100%'
-                }}>
-                <Accordion
-                  style={{
-                    left: "0",
-                    width: '100%',
-                    borderRadius: "20px",
-                    overflow: "hidden"
-                  }}
-                  mb="md"
-                  variant="contained"
-                  chevronPosition="left"
-                >
-                  <Accordion.Item
-                    style={{
-                      borderRadius: "20px"
-                    }}
-                    value="item">
-                    <AccordionControl>Select languages</AccordionControl>
-                    <Accordion.Panel>
-                      <Stack
-                        align="stretch"
-                        justify="center"
-                        gap="xl"
-                      >
-                        <Grid grow>
-                          {['Catalan', 'Czech', 'German', 'Estonian', 'French', 'Hungarian', 'Croatian', 'Italian', 'Polish', 'Russian', 'Slovak', 'Swedish'].map(language => (
-                            <Grid.Col span={{ base: 6, sm: 4, md: 3, lg: 2 }}>
-                              <LanguageCheckbox
-                                key={language}
-                                language={language}
-                                checked={selectedLanguages.includes(language)}
-                                onChange={() => handleLanguageCheckboxChange(language)}
-                              />
-                            </Grid.Col>
-                          ))}
-                        </Grid>
-                        <Center>
-                          <Group justify="center">
-                            <Button onClick={handleCheckAllLanguages}>Check All</Button>
-                            <Button onClick={handleUncheckAllLanguages}>Uncheck All</Button>
-                          </Group>
-                        </Center>
-                        <ThemeButton />
-                      </Stack>
-                    </Accordion.Panel>
-                  </Accordion.Item>
-                </Accordion>
-              </Box>
-            </AppShell.Section>
-            <AppShell.Section
-              style={{
-                transition: "top 0.7s ease", // Define transition for the top property
-                top: inputSection ? "100%" : "0%",
-                width: "100%",
-                height: "100%",
-                overflow: "hidden",
-                // position: "absolute"
-              }}
-            >
-              <Stack
-                align="stretch"
-                justify="center"
-                gap="xl"
-                my="md"
-              >
-                <Button
-                  onClick={(e) => switchSection(!inputSection)}
-                  style={{
-                    borderRadius: "20px"
-                  }}
-                >
-                  Back
-                </Button>
-                <BoxBase>
-                  {translatedTexts[0] == undefined ? selectedLanguages.map((lang, index) => (
-                    <>
-                      <Box key={index} m="md">
-                        <Title mb="xs" order={2}>{lang}</Title>
-                        <Skeleton height={8} radius="xl" />
-                        <Skeleton height={8} mt={6} radius="xl" />
-                        <Skeleton height={8} mt={6} width="70%" radius="xl" />
-                      </Box>
-                      {index !== selectedLanguages.length - 1 && <Divider size="xs" color='dark.4' />}
-                    </>
-                  ))
-                    :
-                    translatedTexts.map((translation, index) => (
-                      <>
-                        <Box key={index} m="md">
-                          <Title mb="xs" order={2}>{translation.language}</Title>
-                          <Editor
-                            value={translation.text.join('\n')}
-                            highlight={code => highlight(code, languages.markup)}
-                            style={{
-                              fontFamily: '"Fira code", "Fira Mono", monospace',
-                              fontSize: 12,
-                            }}
-                          />
-                        </Box>
-                        {index !== translatedTexts.length - 1 && <Divider mt="md" size="xs" color='dark.4' />}
-                      </>
-                    ))}
-                </BoxBase>
-              </Stack>
-            </AppShell.Section>
+            <InputSection
+              setSelectedLanguages={setSelectedLanguages}
+              handleTranslate={handleTranslate}
+              selectedLanguages={selectedLanguages}
+              inputXml={inputXml}
+              setInputXml={setInputXml}
+            />
+            <Results
+              translatedTexts={translatedTexts}
+              switchSection={switchSection}
+              inputSection={inputSection}
+              selectedLanguages={selectedLanguages}
+            />
           </Box>
         </Box>
       </AppShell.Main>
