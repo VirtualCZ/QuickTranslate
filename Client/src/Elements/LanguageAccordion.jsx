@@ -1,4 +1,4 @@
-import { Accordion, Box, Button, Center, Checkbox, Grid, Group, Stack } from '@mantine/core';
+import { Accordion, Box, Button, Center, Grid, Group, Stack } from '@mantine/core';
 import LanguageCheckbox from '../Elements/LanguageCheckbox';
 import ThemeButton from '../Elements/ThemeButton';
 import React from 'react';
