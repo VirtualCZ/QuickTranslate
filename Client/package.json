@@ -8,6 +8,7 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
+    "aws-amplify": "^6.0.28",
     "axios": "^1.6.8",
     "prettier": "^3.2.5",
     "prismjs": "^1.29.0",
