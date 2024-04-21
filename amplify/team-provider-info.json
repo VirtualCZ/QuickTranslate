@@ -15,7 +15,7 @@
       "function": {
         "translatefunction": {
           "deploymentBucketName": "amplify-quicktranslate-dev-204303-deployment",
-          "s3Key": "amplify-builds/translatefunction-4d5567357a6a4c357644-build.zip"
+          "s3Key": "amplify-builds/translatefunction-6c6b58694846676b4756-build.zip"
         }
       },
       "api": {

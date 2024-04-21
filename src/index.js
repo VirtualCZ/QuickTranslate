@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import '@mantine/core/styles.css';
-import { TextInput, Container, createTheme, MantineProvider } from '@mantine/core';
+import { Container, createTheme, MantineProvider } from '@mantine/core';
 import {Amplify} from "aws-amplify"
 import config from "./aws-exports"
 
