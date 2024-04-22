@@ -3,7 +3,6 @@ import LanguageCheckbox from '../Elements/LanguageCheckbox';
 import ThemeButton from '../Elements/ThemeButton';
 import React from 'react';
 import Axios from "axios";
-import { post } from 'aws-amplify/api';
 
 function LanguageAccordion({ handleTranslate, setSelectedLanguages, selectedLanguages }) {
 
@@ -38,32 +37,6 @@ function LanguageAccordion({ handleTranslate, setSelectedLanguages, selectedLang
     const handleUncheckAllLanguages = () => {
         setSelectedLanguages([]);
     };
-
-
-    const tryAPI = async () => {
-
-        try {
-          const restOperation = post({
-            apiName: 'QuickTranslateAPI',
-            path: '/translate',   
-            // options: {
-            //     body: {
-            //       message: 'Mow the lawn',
-            //       toLanguages: "OwO",
-            //       text: "UwU",
-            //     }
-            //   }
-          });
-         
-          const { body } = await restOperation.response;
-          const response = await body.json();
-          console.log('POST call succeeded');
-          console.log(response);
-
-        } catch (e) {
-          console.log('POST call failed: ', JSON.parse(e.response.body));
-        }
-      }
 
     return (
         <Box
@@ -109,11 +82,6 @@ function LanguageAccordion({ handleTranslate, setSelectedLanguages, selectedLang
                             </Grid>
                             <Center>
                                 <Group justify="center">
-                                <Button
-                                        onClick={tryAPI}
-                                    >
-                                        Try API
-                                    </Button>
                                     <Button
                                         onClick={handleCheckAllLanguages}
                                     >

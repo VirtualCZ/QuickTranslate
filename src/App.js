@@ -5,6 +5,7 @@ import Header from './PageParts/Header';
 import ResultSection from './PageParts/ResultSection';
 import InputSection from './PageParts/InputSection';
 import 'prismjs/themes/prism-tomorrow.min.css'; // Example style, you can use another
+import { post } from 'aws-amplify/api';
 
 function App() {
   const [inputSection, switchSection] = useState(true);
@@ -16,50 +17,57 @@ function App() {
     setTranslatedTexts([])
     switchSection(!inputSection)
     try {
-      const response = await Axios.post(
-        'http://localhost:3030/api/translate',
-        {
-          text: inputXml,
-          to: selectedLanguages.map(lang => {
-            switch (lang) {
-              case 'Catalan':
-                return 'ca';
-              case 'Czech':
-                return 'cs';
-              case 'German':
-                return 'de';
-              case 'Estonian':
-                return 'et';
-              case 'French':
-                return 'fr';
-              case 'Hungarian':
-                return 'hu';
-              case 'Croatian':
-                return 'hr';
-              case 'Italian':
-                return 'it';
-              case 'Polish':
-                return 'pl';
-              case 'Russian':
-                return 'ru';
-              case 'Slovak':
-                return 'sk';
-              case 'Swedish':
-                return 'sv';
-              default:
-                return '';
+      const restOperation = post({
+        apiName: 'QuickTranslateAPI',
+        path: '/translate',   
+        options: {
+            body: {
+              text: inputXml,
+              to: selectedLanguages.map(lang => {
+                switch (lang) {
+                  case 'Catalan':
+                    return 'ca';
+                  case 'Czech':
+                    return 'cs';
+                  case 'German':
+                    return 'de';
+                  case 'Estonian':
+                    return 'et';
+                  case 'French':
+                    return 'fr';
+                  case 'Hungarian':
+                    return 'hu';
+                  case 'Croatian':
+                    return 'hr';
+                  case 'Italian':
+                    return 'it';
+                  case 'Polish':
+                    return 'pl';
+                  case 'Russian':
+                    return 'ru';
+                  case 'Slovak':
+                    return 'sk';
+                  case 'Swedish':
+                    return 'sv';
+                  default:
+                    return '';
+                }
+              })
             }
-          })
-        }
-      );
+          }
+      });
+     
+      const { body } = await restOperation.response;
+      const response = await body.json();
+      setTranslatedTexts(response);
+      console.log('POST call succeeded');
+      console.log(response);
 
-      // Handle response
-      console.log(response.data);
-      setTranslatedTexts(response.data);
-    } catch (error) {
-      console.error('Error fetching translation:', error);
+    } catch (e) {
+      // console.log('POST call failed: ', JSON.parse(e.response.body));
+      console.error('Error fetching translation:', e);
     }
-  };
+  }
 
   return (
     <AppShell
